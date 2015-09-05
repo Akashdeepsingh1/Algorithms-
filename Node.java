@@ -16,7 +16,7 @@ public class Node {
 		return num + "";
 	}
 	public static void main(String args[]){
-		int bnum[] = new int[]{123,43,241,5,2,865,457,0,345,888,95959,21574,7,52};
+		int bnum[] = new int[]{123,43,241,5,2,865,457,0,345,888,959,21574,7,52};
 	
 		Linked a[]  = new Linked[10];
 		for(int i= 0; i< 10;i++){
