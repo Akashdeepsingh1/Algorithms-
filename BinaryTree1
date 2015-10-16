@@ -1,0 +1,492 @@
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Random;
+import java.util.Stack;
+
+public class Node {
+
+	int num;
+	Node left;
+	Node right;
+
+	Node(int num) {
+		this.num = num;
+	}
+
+	public void display() {
+		System.out.println(num);
+	}
+
+	public String toString() {
+		return num + "";
+	}
+
+	public static void main(String args[]) {
+
+		Binary b = new Binary();
+		b.insertNormal(50, null);
+		b.insertBST(5);
+		b.insertBST(15);
+		b.insertBST(24);
+		b.insertBST(64);
+		b.insertBST(54);
+		b.insertBST(93);
+		b.insertBST(00);
+		b.insertBST(53);
+		b.insertBST(432);
+
+		b.insertBST(-21);
+		b.insertBST(-100);
+		b.insertBST(8373);
+		b.insertBST(-8204);
+		// b.insertBST(8400);
+
+		Binary c = new Binary();
+
+		c.insertBST(234);
+		c.insertBST(432);
+		c.insertBST(89);
+		c.insertBST(1);
+		c.insertBST(9990);
+		// int num = b.sizeTree(b.firstLink);
+		// System.out.println(num);
+
+		// b.insertNormal(100,b.firstLink.left.right);
+		// b.inOrder(b.firstLink);
+		// int num = b.maxNode(b.firstLink);
+		// System.out.println(num + "\n \n");
+		// boolean bool = b.searchElement(b.firstLink, 0);
+		// System.out.println(bool);
+
+		// b.delete(b.firstLink.right);
+
+		// b.inOrder(b.firstLink);
+		// System.out.println(((Integer)null<0)?1:2);
+		// Node a = b.MaximumNode(b.firstLink);
+		// System.out.println("The Maximum Node in the tree is " + a.num);
+
+		// b.levelOrder(b.firstLink);
+		// int n = b.heightBS(b.firstLink);
+		// System.out.println(n);
+		// int i= b.countLeaves(b.firstLink);
+		// System.out.println(i);
+		// int fullBinaryTree = b.countFullBinaryNode(b.firstLink);
+		// System.out.println(fullBinaryTree);
+
+		// int halfNode = b.countHalfBinaryNode(b.firstLink);
+		// System.out.println(halfNode);
+
+		// boolean bool = b.twinTree(b.firstLink, c.firstLink);
+		// System.out.println(bool);
+
+		// b.inOrder(c.firstLink);
+		// int num = b.findDiameter(b.firstLink, 0);
+		// System.out.println(num);
+
+		//int sum[] = b.levelMaxSum(b.firstLink);
+		//System.out.println(sum[0] + " "+ sum[1]);
+		
+		//int level = b.numberOfLevel(b.firstLink);
+		//System.out.println(level);
+		
+		int sumVerti = b.treeVerticalSum(b.firstLink);
+		System.out.println(sumVerti);
+	}
+}
+
+class Binary {
+	Node firstLink;
+
+	public Binary() {
+		firstLink = null;
+	}
+
+	// find the twin tree
+	public boolean twinTree(Node a, Node b) {
+		if (a == null && b == null) {
+			return true;
+		} else if ((a == null && b != null) || (a != null && b == null)) {
+			return false;
+		} else if ((a.left != null && b.left == null)
+				|| (b.left != null && a.left == null)
+				|| (a.right != null && b.right == null)
+				|| (b.left != null && a.left == null)) {
+			return false;
+		} else {
+			return (twinTree(a.left, b.left) && twinTree(a.right, b.right));
+		}
+
+	}
+
+	// find the maximum sum in a binary tree
+	public int[] levelMaxSum(Node a) {
+		if (a == null) {
+			return null;
+		} else {
+			Queue<Node> qu = new LinkedList<Node>();
+			Queue<Node> qu2 = new LinkedList<Node>();
+			int max = 0;
+			int level = 0;
+			int level1 = 0;
+			qu.add(a);
+			while (!qu.isEmpty() || !qu2.isEmpty()) {
+
+				int sum = 0;
+				while (!qu.isEmpty()) {
+					Node root = qu.poll();
+					if (root.left != null) {
+						qu2.add(root.left);
+					}
+					if (root.right != null) {
+						qu2.add(root.right);
+					}
+					if (root != null) {
+						sum = sum + root.num;
+					}
+				}
+				if (sum > max) {
+					max = sum;
+					level = level1;
+				}
+				level1++;
+				while (!qu2.isEmpty()) {
+					Node root = qu2.poll();
+					if (root.left != null) {
+						qu.add(root.left);
+					}
+					if (root.right != null) {
+						qu.add(root.right);
+					}
+					if (root != null) {
+						sum = sum + root.num;
+					}
+				}
+				
+				if (sum > max) {
+					max = sum;
+					level = level1;
+				}
+				level1++;
+				
+			}
+			int arr [] = new int[]{max,level};
+			return arr;
+		}
+	}
+
+	//find the number of level
+	
+	public int numberOfLevel(Node a){
+		if( a== null){
+			return 0;
+		}else{
+			Stack<Node> st1 = new Stack<Node>();
+			Stack<Node> st2 = new Stack<Node>();
+			int level = 1;
+			st1.add(a);
+			boolean flag= true;
+			while(!st1.isEmpty() || !st2.isEmpty()){
+				
+				while(!st2.isEmpty()){
+					Node node = st2.pop();
+					if(node.left!=null){
+						st1.add(node.left);
+					}
+					if(node.right!=null){
+						st1.add(node.right);
+					}
+					if(flag){
+						level++;
+						flag = false;
+					}
+					
+				}
+			
+				while(!st1.isEmpty()){
+					Node node = st1.pop();
+					if(node.left!=null){
+						st2.add(node.left);
+					}
+					if(node.right!=null){
+						st2.add(node.right);
+					}
+					if(!flag){
+						level++;
+						flag = true;
+					}
+				}
+				
+				
+				
+			}
+			return level;
+		}
+	}
+	
+	// find the diameter of a tree
+	public int findDiameter(Node a, int num) {
+		if (a == null) {
+			return 0;
+		} else {
+			int left = findDiameter(a.left, num);
+			int right = findDiameter(a.right, num);
+			if (left + right > num) {
+				num = left + right + 1;
+				System.out.println(num);
+			}
+			return Math.max(left, right) + 1;
+		}
+	}
+
+	// find the sum of binary tree
+	public int treeVerticalSum(Node a){
+		if( a == null){
+			return 0;
+		}else{
+			int root = a.num;
+			int left = treeVerticalSum(a.left);
+			int right = treeVerticalSum(a.right);
+			return Math.max(left, right)+root;
+		}
+	}
+
+	// find Deepest Node on Binary Tree
+	public void deepestNode(Node node) {
+		// just do level order search and the last element add in the stack is
+		// the deepest node
+	}
+
+	// delete the tree
+	public void delete(Node a) {
+
+		if (a == null) {
+
+			return;
+		} else if (a == firstLink && a.left == null && a.right == null) {
+			firstLink = null;
+		} else {
+			delete(a.left);
+			delete(a.right);
+			a.left = null;
+			a.right = null;
+			a = null;
+
+		}
+
+	}
+
+	// find the number of leaves
+	public int countLeaves(Node a) {
+		if (a == null) {
+			return 0;
+		} else {
+
+			int left = countLeaves(a.left);
+			int right = countLeaves(a.right);
+			return left + right + 1;
+		}
+	}
+
+	// find the number of half nodes in a binary tree
+
+	public int countHalfBinaryNode(Node a) {
+		if (a == null) {
+			return 0;
+		} else {
+			int left = countHalfBinaryNode(a.left);
+			int right = countHalfBinaryNode(a.right);
+			if ((a.left != null && a.right == null)
+					|| (a.left == null && a.right != null)) {
+				return left + right + 1;
+			} else {
+				return left + right;
+			}
+		}
+	}
+
+	// find the full Nodes in a binary tree
+	public int countFullBinaryNode(Node a) {
+		if (a == null) {
+			return 0;
+		} else {
+			int left = countFullBinaryNode(a.left);
+			int right = countFullBinaryNode(a.right);
+			if (a.left != null && a.right != null) {
+				return left + right + 1;
+			} else {
+				return left + right;
+			}
+		}
+	}
+
+	// print level order from leaf to root
+	public void levelOrder(Node root) {
+		Queue<Node> queue = new LinkedList<Node>();
+		Stack<Node> stack = new Stack<Node>();
+		queue.add(root);
+		while (!queue.isEmpty()) {
+			Node a = queue.poll();
+			stack.push(a);
+			if (a.right != null) {
+				queue.add(a.right);
+			}
+			if (a.left != null) {
+				queue.add(a.left);
+			}
+		}
+		System.out.println("The Deepest Node is " + stack.peek());
+		/*
+		 * while (!stack.isEmpty()) { System.out.println(stack.pop()); }
+		 */
+	}
+
+	// find the height of an binary tree
+	public int heightBS(Node a) {
+		if (a == null) {
+			return 0;
+		} else {
+			int i = heightBS(a.left);
+			int j = heightBS(a.right);
+
+			return Math.max(i, j) + 1;
+		}
+	}
+
+	// find the maximum element in the tree
+	public int maxNode(Node a) {
+		if (a == null) {
+			return Integer.MIN_VALUE;
+		} else {
+			int root = a.num;
+			int num1 = maxNode(a.left);
+			int num2 = maxNode(a.right);
+			if (root > num1 && root > num2) {
+				return root;
+			} else if (root < num1 && num1 > num2) {
+				return num1;
+			} else {
+				return num2;
+			}
+		}
+
+	}
+
+	// find the size of binary tree
+	public int sizeTree(Node a) {
+		if (a == null) {
+			return 0;
+		} else {
+			int num1 = sizeTree(a.left);
+			int num2 = sizeTree(a.right);
+			return num1 + num2 + 1;
+		}
+	}
+
+	// search an element in a binary tree
+	public boolean searchElement(Node a, int num) {
+		if (a == null) {
+			return false;
+		} else {
+			int root = a.num;
+			if (root == num) {
+				return true;
+			} else {
+				boolean bool1 = searchElement(a.left, num);
+				boolean bool2 = searchElement(a.right, num);
+				return bool1 || bool2;
+			}
+		}
+	}
+
+	// Insert normal
+	public void insertNormal(int num, Node a) {
+		Node node = new Node(num);
+		boolean flag = true;
+		Node b = firstLink;
+		if (firstLink == null && a == null) {
+			firstLink = node;
+		} else {
+			Node n = firstLink;
+			if (a == null) {
+				n = firstLink;
+			} else {
+				n = a;
+			}
+			while (n.left != null || n.right != null) {
+				b = n;
+				if (flag) {
+					n = n.left;
+					flag = false;
+				} else {
+					flag = true;
+					n = n.right;
+				}
+			}
+			if (b.left == null) {
+				b.left = node;
+			} else {
+				b.right = node;
+			}
+
+		}
+	}
+
+	// Insert in BST
+	public void insertBST(int num) {
+		Node node = new Node(num);
+		Node a = firstLink;
+		Node b = firstLink;
+		if (a == null) {
+			firstLink = node;
+		} else {
+			while (a != null) {
+				b = a;
+				if (a.num > num) {
+					a = a.left;
+				} else {
+					a = a.right;
+				}
+			}
+
+			if (b.num > num) {
+				b.left = node;
+			} else {
+				b.right = node;
+			}
+		}
+	}
+
+	// Inorder Traversal
+	public void inOrder(Node a) {
+		if (a == null) {
+			return;
+		} else {
+			inOrder(a.left);
+			System.out.println(a.num);
+			inOrder(a.right);
+		}
+	}
+
+	// PreOrder Traversal
+	public void preOrder(Node a) {
+		if (a == null) {
+			return;
+		} else {
+			System.out.println(a.num);
+			inOrder(a.left);
+			inOrder(a.right);
+		}
+	}
+
+	// postOrder Traversal
+	public void postOrder(Node a) {
+		if (a == null) {
+			return;
+		} else {
+			inOrder(a.left);
+			inOrder(a.right);
+			System.out.println(a.num);
+		}
+	}
+}
